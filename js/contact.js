@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error:', error);
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalText;
-            alert('Something went wrong. Please try again.');
+            alert(`Error: ${error.message}`);
         }
     });
 });

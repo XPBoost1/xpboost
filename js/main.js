@@ -299,9 +299,13 @@ if (quoteForm) {
             }
         } catch (error) {
             console.error('Error:', error);
-            submitBtn.innerText = originalText;
-            submitBtn.disabled = false;
-            alert('Something went wrong. Please try again.');
+            const submitBtn = document.querySelector('.wizard-footer .btn-primary');
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Submit Request <i data-lucide="send"></i>';
+                lucide.createIcons();
+            }
+            alert(`Error: ${error.message}`);
         }
     });
 }
