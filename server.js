@@ -31,6 +31,17 @@ transporter.verify((error, success) => {
     }
 });
 
+// Debug Endpoint (Temporary)
+app.get('/api/debug-env', (req, res) => {
+    res.json({
+        message: 'Environment Variable Debug',
+        emailUserConfigured: !!process.env.EMAIL_USER,
+        emailPassConfigured: !!process.env.EMAIL_PASS,
+        emailUserLength: process.env.EMAIL_USER ? process.env.EMAIL_USER.length : 0,
+        emailPassLength: process.env.EMAIL_PASS ? process.env.EMAIL_PASS.length : 0
+    });
+});
+
 // Contact Form Endpoint
 app.post('/api/contact', async (req, res) => {
     const { name, email, company, budget, services, message } = req.body;
