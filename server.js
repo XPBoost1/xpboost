@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(express.static('.')); // Removed for Vercel serverless
+app.use(express.static('.')); // Serve static files from current directory
 
 // Nodemailer Transporter
 const transporter = nodemailer.createTransport({
@@ -152,10 +152,10 @@ app.post('/api/quote', async (req, res) => {
     }
 });
 
-// Export the app for Vercel
+// Export the app for serverless deployments (Vercel, etc.)
 module.exports = app;
 
-// Only listen if run directly (not imported as a module)
+// Only start the server if this file is run directly
 if (require.main === module) {
     app.listen(PORT, () => {
         console.log(`Server running on http://localhost:${PORT}`);
