@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
 
             try {
-                const response = await fetch('http://localhost:3000/api/subscribe', {
+                const response = await fetch('/api/subscribe', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email })
@@ -243,7 +243,7 @@ if (quoteForm) {
         data.secondary_goals = Array.from(quoteForm.querySelectorAll('input[name="secondary_goals"]:checked')).map(cb => cb.value);
 
         try {
-            const response = await fetch('http://localhost:3000/api/quote', {
+            const response = await fetch('/api/quote', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
