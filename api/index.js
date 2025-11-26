@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('.')); // Serve static files from current directory
+// app.use(express.static('.')); // Removed for Vercel serverless
 
 // Nodemailer Transporter
 const transporter = nodemailer.createTransport({
