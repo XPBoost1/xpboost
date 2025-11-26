@@ -72,8 +72,13 @@ document.addEventListener('DOMContentLoaded', () => {
             modalRole.textContent = data.role;
 
             // Update Icon
-            modalIcon.innerHTML = `<i data-lucide="${data.icon}" style="width: 80px; height: 80px; color: var(--primary);"></i>`;
-            lucide.createIcons();
+            // Update Icon or Image
+            if (data.icon.includes('/') || data.icon.startsWith('http')) {
+                modalIcon.innerHTML = `<img src="${data.icon}" alt="${data.title}" style="width: 100%; height: 100%; object-fit: cover;">`;
+            } else {
+                modalIcon.innerHTML = `<i data-lucide="${data.icon}" style="width: 80px; height: 80px; color: var(--primary);"></i>`;
+                lucide.createIcons();
+            }
 
             // Update Tags
             modalTags.innerHTML = data.tags.map(tag => `<span class="tag">${tag.trim()}</span>`).join('');
