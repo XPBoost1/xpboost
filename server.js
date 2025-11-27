@@ -43,19 +43,20 @@ app.get('/api/debug-env', (req, res) => {
 });
 
 // Contact Form Endpoint
+// Contact Form Endpoint
 app.post('/api/contact', async (req, res) => {
-    const { name, email, company, budget, services, message } = req.body;
+    const { fullName, email, phone, preferredContact, services, message } = req.body;
 
     const mailOptions = {
-        from: `"${name}" <${email}>`, // Sender address (Note: Gmail might override this with auth user)
+        from: `"${fullName}" <${email}>`, // Sender address
         to: process.env.EMAIL_USER, // List of receivers
-        subject: `New Contact Form Submission from ${name}`,
+        subject: `New Contact Form Submission from ${fullName}`,
         html: `
             <h3>New Contact Request</h3>
-            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Name:</strong> ${fullName}</p>
             <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Company:</strong> ${company || 'N/A'}</p>
-            <p><strong>Budget:</strong> ${budget}</p>
+            <p><strong>Phone:</strong> ${phone || 'N/A'}</p>
+            <p><strong>Preferred Contact:</strong> ${preferredContact || 'N/A'}</p>
             <p><strong>Services:</strong> ${services ? services.join(', ') : 'None'}</p>
             <p><strong>Message:</strong></p>
             <p>${message}</p>

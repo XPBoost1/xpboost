@@ -1,66 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('contactForm');
-    const fileInput = document.getElementById('fileInput');
-    const fileArea = document.getElementById('fileUploadArea');
-    const fileList = document.getElementById('fileList');
-    let uploadedFiles = [];
-
-    // File Upload Handling
-    fileArea.addEventListener('click', () => fileInput.click());
-
-    fileArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        fileArea.classList.add('drag-over');
-    });
-
-    fileArea.addEventListener('dragleave', () => {
-        fileArea.classList.remove('drag-over');
-    });
-
-    fileArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        fileArea.classList.remove('drag-over');
-        handleFiles(e.dataTransfer.files);
-    });
-
-    fileInput.addEventListener('change', (e) => {
-        handleFiles(e.target.files);
-    });
-
-    function handleFiles(files) {
-        Array.from(files).forEach(file => {
-            if (!uploadedFiles.some(f => f.name === file.name)) {
-                uploadedFiles.push(file);
-                addFileToList(file);
-            }
-        });
-    }
-
-    function addFileToList(file) {
-        const item = document.createElement('div');
-        item.className = 'file-item';
-        item.innerHTML = `
-            <span>${file.name} (${formatSize(file.size)})</span>
-            <button type="button" class="remove-file"><i data-lucide="x" style="width:16px;"></i></button>
-        `;
-
-        item.querySelector('.remove-file').addEventListener('click', (e) => {
-            e.stopPropagation();
-            uploadedFiles = uploadedFiles.filter(f => f !== file);
-            item.remove();
-        });
-
-        fileList.appendChild(item);
-        lucide.createIcons();
-    }
-
-    function formatSize(bytes) {
-        if (bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-    }
 
     // Form Validation & Submission
     form.addEventListener('submit', async (e) => {
@@ -85,12 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Gather Data
         const formData = {
-            name: form.querySelector('input[placeholder="John Doe"]').value,
-            email: form.querySelector('input[type="email"]').value,
-            company: form.querySelector('input[placeholder="Company Ltd."]').value,
-            budget: form.querySelector('select').value,
-            services: Array.from(form.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.parentNode.textContent.trim()),
-            message: form.querySelector('textarea').value
+            fullName: form.querySelector('input[name="fullName"]').value,
+            email: form.querySelector('input[name="email"]').value,
+            phone: form.querySelector('input[name="phone"]').value,
+            preferredContact: form.querySelector('select[name="preferredContact"]').value,
+            services: Array.from(form.querySelectorAll('input[name="services"]:checked')).map(cb => cb.value),
+            message: form.querySelector('textarea[name="message"]').value
         };
 
         // Simulate Submission
