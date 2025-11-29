@@ -206,6 +206,38 @@ function initQuoteWizard() {
 
     // Initial show
     showStep(0);
+
+    // Toggle "Other Goal" input field
+    const otherGoalCheckbox = document.querySelector('input[name="goals"][value="other"]');
+    const otherGoalInput = document.getElementById('other-goal-input');
+
+    if (otherGoalCheckbox && otherGoalInput) {
+        otherGoalCheckbox.addEventListener('change', function () {
+            if (this.checked) {
+                otherGoalInput.style.display = 'block';
+            } else {
+                otherGoalInput.style.display = 'none';
+                // Clear the input when unchecked
+                otherGoalInput.querySelector('input').value = '';
+            }
+        });
+    }
+
+    // Toggle "Other Service" input field
+    const otherServiceCheckbox = document.querySelector('input[name="services"][value="other"]');
+    const otherServiceInput = document.getElementById('other-service-input');
+
+    if (otherServiceCheckbox && otherServiceInput) {
+        otherServiceCheckbox.addEventListener('change', function () {
+            if (this.checked) {
+                otherServiceInput.style.display = 'block';
+            } else {
+                otherServiceInput.style.display = 'none';
+                // Clear the input when unchecked
+                otherServiceInput.querySelector('input').value = '';
+            }
+        });
+    }
 }
 
 function validateStep(stepIndex) {

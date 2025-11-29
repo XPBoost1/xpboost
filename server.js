@@ -112,12 +112,42 @@ app.post('/api/subscribe', async (req, res) => {
 app.post('/api/quote', async (req, res) => {
     const {
         companyName, companySize, industry,
-        goals,
+        goals, other_goal,
         timeline,
         budget,
-        services, additional_info,
+        services, other_service, additional_info,
         name, email
     } = req.body;
+
+    // Format goals to include custom "other" text
+    let goalsDisplay;
+    if (Array.isArray(goals)) {
+        goalsDisplay = goals.map(goal => {
+            if (goal === 'other' && other_goal) {
+                return `other (${other_goal})`;
+            }
+            return goal;
+        }).join(', ');
+    } else if (goals) {
+        goalsDisplay = goals;
+    } else {
+        goalsDisplay = 'None selected';
+    }
+
+    // Format services to include custom "other" text
+    let servicesDisplay;
+    if (Array.isArray(services)) {
+        servicesDisplay = services.map(service => {
+            if (service === 'other' && other_service) {
+                return `other (${other_service})`;
+            }
+            return service;
+        }).join(', ');
+    } else if (services) {
+        servicesDisplay = services;
+    } else {
+        servicesDisplay = 'None selected';
+    }
 
     const mailOptions = {
         from: `"${name}" <${email}>`,
@@ -128,11 +158,11 @@ app.post('/api/quote', async (req, res) => {
             <br>
             <h3>Company Information</h3>
             <p><strong>Company Name:</strong> ${companyName}</p>
-            <p><strong>Company Size:</strong> ${companySize}</p>
+            <p><strong>Company Size:</strong> ${companySize || 'Not specified'}</p>
             <p><strong>Industry:</strong> ${industry}</p>
             <br>
             <h3>Project Goals</h3>
-            <p><strong>Goals:</strong> ${Array.isArray(goals) ? goals.join(', ') : goals || 'None'}</p>
+            <p><strong>Goals:</strong> ${goalsDisplay}</p>
             <br>
             <h3>Timeline</h3>
             <p><strong>Project Timeline:</strong> ${timeline}</p>
@@ -141,9 +171,9 @@ app.post('/api/quote', async (req, res) => {
             <p><strong>Budget Range:</strong> ${budget}</p>
             <br>
             <h3>Services & Requirements</h3>
-            <p><strong>Services Needed:</strong> ${Array.isArray(services) ? services.join(', ') : services || 'None'}</p>
+            <p><strong>Services Needed:</strong> ${servicesDisplay}</p>
             <p><strong>Additional Information:</strong></p>
-            <p>${additional_info || 'N/A'}</p>
+            <p>${additional_info || 'None provided'}</p>
             <br>
             <h3>Contact Details</h3>
             <p><strong>Name:</strong> ${name}</p>
