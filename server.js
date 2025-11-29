@@ -125,26 +125,26 @@ app.post('/api/quote', async (req, res) => {
         subject: `New Quote Request from ${companyName}`,
         html: `
             <h2>New Quote Request</h2>
-            
+            <br>
             <h3>Company Information</h3>
             <p><strong>Company Name:</strong> ${companyName}</p>
             <p><strong>Company Size:</strong> ${companySize}</p>
             <p><strong>Industry:</strong> ${industry}</p>
-
+            <br>
             <h3>Project Goals</h3>
             <p><strong>Goals:</strong> ${Array.isArray(goals) ? goals.join(', ') : goals || 'None'}</p>
-
+            <br>
             <h3>Timeline</h3>
             <p><strong>Project Timeline:</strong> ${timeline}</p>
-
+            <br>
             <h3>Budget</h3>
             <p><strong>Budget Range:</strong> ${budget}</p>
-
+            <br>
             <h3>Services & Requirements</h3>
             <p><strong>Services Needed:</strong> ${Array.isArray(services) ? services.join(', ') : services || 'None'}</p>
             <p><strong>Additional Information:</strong></p>
             <p>${additional_info || 'N/A'}</p>
-
+            <br>
             <h3>Contact Details</h3>
             <p><strong>Name:</strong> ${name}</p>
             <p><strong>Email:</strong> ${email}</p>

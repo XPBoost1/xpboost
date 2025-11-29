@@ -70,11 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = document.querySelector('.header');
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
-            header.style.background = 'rgba(11, 11, 16, 0.95)';
-            header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.4)';
+            header.classList.add('scrolled');
         } else {
-            header.style.background = 'rgba(11, 11, 16, 0.8)';
-            header.style.boxShadow = 'none';
+            header.classList.remove('scrolled');
         }
     });
 
