@@ -246,12 +246,12 @@ body.ai-agent-theme .text-gold {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #3a3d2f 0%, #2d2f24 100%);
+  background: linear-gradient(135deg, #1a4d2e 0%, #16402a 100%);
   color: white;
-  border: 1px solid rgba(202, 172, 77, 0.3);
+  border: 1px solid rgba(34, 197, 94, 0.3);
   box-shadow:
     0 4px 15px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(202, 172, 77, 0.1) inset;
+    0 0 0 1px rgba(34, 197, 94, 0.1) inset;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
@@ -264,21 +264,21 @@ body.ai-agent-theme .text-gold {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #d4af37 0%, #c9a64d 100%);
+  background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
   opacity: 0;
   transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: -1;
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #d4af37 0%, #c9a64d 100%);
-  color: #1a1a1a;
-  border-color: #d4af37;
+  background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
+  color: #0a0a0f;
+  border-color: #22C55E;
   transform: translateY(-2px);
   box-shadow:
-    0 8px 30px rgba(212, 175, 55, 0.5),
-    0 0 40px rgba(212, 175, 55, 0.3),
-    0 0 0 1px rgba(255, 223, 128, 0.5) inset;
+    0 8px 30px rgba(34, 197, 94, 0.5),
+    0 0 40px rgba(34, 197, 94, 0.3),
+    0 0 0 1px rgba(134, 239, 172, 0.5) inset;
 }
 
 .btn-outline {
