@@ -85,60 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Quote Wizard Logic (if present)
     initQuoteWizard();
 
-    // Newsletter Subscription
-    const newsletterForms = document.querySelectorAll('.newsletter-form');
-    newsletterForms.forEach(form => {
-        const input = form.querySelector('input[type="email"]');
-        const button = form.querySelector('button');
-
-        button.addEventListener('click', async (e) => {
-            e.preventDefault();
-            const email = input.value.trim();
-
-            if (!email) {
-                input.style.borderColor = '#EF4444';
-                return;
-            }
-
-            const originalContent = button.innerHTML;
-            button.disabled = true;
-            button.innerHTML = '<i data-lucide="loader-2" class="animate-spin" style="width: 16px;"></i>';
-            lucide.createIcons();
-
-            try {
-                const response = await fetch('http://localhost:3000/api/subscribe', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email })
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    button.innerHTML = '<i data-lucide="check" style="width: 16px;"></i>';
-                    input.value = '';
-                    input.placeholder = 'Subscribed!';
-                    setTimeout(() => {
-                        button.disabled = false;
-                        button.innerHTML = originalContent;
-                        input.placeholder = 'Enter email';
-                        lucide.createIcons();
-                    }, 3000);
-                } else {
-                    throw new Error(result.message);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                button.disabled = false;
-                button.innerHTML = '<i data-lucide="x" style="width: 16px;"></i>';
-                setTimeout(() => {
-                    button.innerHTML = originalContent;
-                    lucide.createIcons();
-                }, 2000);
-            }
-        });
-    });
-
     // Allow unchecking radio buttons (for optional fields)
     let lastChecked = {};
     document.querySelectorAll('input[type="radio"]').forEach(radio => {
