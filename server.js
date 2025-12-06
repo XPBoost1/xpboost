@@ -394,21 +394,19 @@ apiRouter.post('/contact', handleContact);
 apiRouter.post('/subscribe', handleSubscribe);
 apiRouter.post('/quote', handleQuote);
 
-// Use apiRouter for just /api/ routes
-// Important: On Vercel, requests to /api/contact might arrive as /api/contact OR /contact depending on config.
-// By mounting to /api, we match /api/contact.
-// By mounting to /, we match /contact.
-app.use('/api', apiRouter);
-app.use('/', apiRouter);
-
-// Global 404 Handler for API - Forces JSON response
-app.use('/api/*', (req, res) => {
+// 404 Handler for API Routes (Must be last)
+apiRouter.use((req, res) => {
     res.status(404).json({
         success: false,
         message: 'API Endpoint Not Found',
         path: req.path
     });
 });
+
+// Mount the API Router
+// Note: We mount to both paths to handle Vercel's potentially variable routing behavior
+app.use('/api', apiRouter);
+app.use('/', apiRouter);
 
 // Export the app for serverless deployments (Vercel, etc.)
 module.exports = app;
