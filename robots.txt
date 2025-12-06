@@ -1,0 +1,25 @@
+# NEAHXp.in - Robots.txt
+# Updated: December 6, 2025
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /*.json$
+Disallow: /node_modules/
+Disallow: /.git/
+Disallow: /.env
+
+# Allow CSS and JS
+Allow: /css/
+Allow: /js/
+Allow: /images/
+
+# Sitemap
+Sitemap: https://www.neahxp.in/sitemap.xml
+
+# Crawl-delay for specific bots (optional)
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10

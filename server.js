@@ -43,32 +43,112 @@ app.get('/api/debug-env', (req, res) => {
 });
 
 // Contact Form Endpoint
-// Contact Form Endpoint
 app.post('/api/contact', async (req, res) => {
-    const { fullName, email, phone, preferredContact, services, message } = req.body;
+    const { fullName, email, message } = req.body;
 
+    // Validation
+    if (!fullName || !email || !message) {
+        return res.status(400).json({
+            success: false,
+            message: 'Please provide all required fields: Full Name, Email, and Message'
+        });
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({
+            success: false,
+            message: 'Please provide a valid email address'
+        });
+    }
+
+    // Validate name (at least 2 characters)
+    if (fullName.trim().length < 2) {
+        return res.status(400).json({
+            success: false,
+            message: 'Please provide a valid full name (at least 2 characters)'
+        });
+    }
+
+    // Validate message (at least 10 characters)
+    if (message.trim().length < 10) {
+        return res.status(400).json({
+            success: false,
+            message: 'Please provide a more detailed message (at least 10 characters)'
+        });
+    }
+
+    // Professional HTML email template
     const mailOptions = {
-        from: `"${fullName}" <${email}>`, // Sender address
-        to: process.env.EMAIL_USER, // List of receivers
-        subject: `New Contact Form Submission from ${fullName}`,
+        from: `"${fullName}" <${email}>`,
+        to: process.env.EMAIL_USER,
+        replyTo: email,
+        subject: 'New Message from Website Contact Form',
         html: `
-            <h3>New Contact Request</h3>
-            <p><strong>Name:</strong> ${fullName}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Phone:</strong> ${phone || 'N/A'}</p>
-            <p><strong>Preferred Contact:</strong> ${preferredContact || 'N/A'}</p>
-            <p><strong>Services:</strong> ${services ? services.join(', ') : 'None'}</p>
-            <p><strong>Message:</strong></p>
-            <p>${message}</p>
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
+                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                    .header { background: linear-gradient(135deg, #22c55e, #16a34a); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
+                    .header h1 { margin: 0; font-size: 24px; }
+                    .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
+                    .field { margin-bottom: 20px; }
+                    .label { font-weight: 600; color: #4b5563; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+                    .value { background: white; padding: 12px 15px; border-radius: 6px; border-left: 3px solid #22c55e; }
+                    .message-box { background: white; padding: 20px; border-radius: 6px; border-left: 3px solid #22c55e; white-space: pre-wrap; }
+                    .footer { text-align: center; margin-top: 20px; color: #6b7280; font-size: 12px; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h1>📬 New Contact Form Submission</h1>
+                    </div>
+                    <div class="content">
+                        <div class="field">
+                            <div class="label">Full Name</div>
+                            <div class="value">${fullName}</div>
+                        </div>
+                        
+                        <div class="field">
+                            <div class="label">Email Address</div>
+                            <div class="value">
+                                <a href="mailto:${email}" style="color: #22c55e; text-decoration: none;">${email}</a>
+                            </div>
+                        </div>
+                        
+                        <div class="field">
+                            <div class="label">Message</div>
+                            <div class="message-box">${message}</div>
+                        </div>
+                        
+                        <div class="footer">
+                            <p>Received: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'full', timeStyle: 'short' })}</p>
+                            <p>This message was sent via the NEAHXp contact form</p>
+                        </div>
+                    </div>
+                </div>
+            </body>
+            </html>
         `
     };
 
     try {
         await transporter.sendMail(mailOptions);
-        res.status(200).json({ success: true, message: 'Message sent successfully!' });
+        console.log(`Contact form submitted successfully by ${fullName} (${email})`);
+        res.status(200).json({
+            success: true,
+            message: 'Message sent successfully! We will get back to you within 24 hours.'
+        });
     } catch (error) {
-        console.error('Error sending email:', error);
-        res.status(500).json({ success: false, message: error.message });
+        console.error('Error sending contact email:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to send message. Please try again or contact us directly at neahxp@gmail.com'
+        });
     }
 });
 
