@@ -381,8 +381,13 @@ apiRouter.use((req, res) => {
 
 // Mount the API Router
 // Note: We mount to both paths to handle Vercel's potentially variable routing behavior
+// Mount the API Router
+// Handling Vercel paths:
+// 1. If Vercel passes "/api/contact", this matches.
 app.use('/api', apiRouter);
-app.use('/', apiRouter);
+
+// 2. If Vercel rewrites to "/" or passes "/contact", this catch-all mount matches.
+app.use(apiRouter);
 
 // Export the app for serverless deployments
 module.exports = app;
