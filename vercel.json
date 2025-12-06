@@ -3,8 +3,45 @@
     "name": "neahxp-backend",
     "rewrites": [
         {
+            "source": "/",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/index",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/about",
+            "destination": "/about.html"
+        },
+        {
+            "source": "/services",
+            "destination": "/services.html"
+        },
+        {
+            "source": "/contact",
+            "destination": "/contact.html"
+        },
+        {
+            "source": "/portfolio",
+            "destination": "/portfolio.html"
+        },
+        {
+            "source": "/blog",
+            "destination": "/blog.html"
+        },
+        {
+            "source": "/quote",
+            "destination": "/quote.html"
+        },
+        {
+            "source": "/services/:service",
+            "destination": "/services/:service.html"
+        },
+        {
             "source": "/api/(.*)",
             "destination": "/api/index.js"
         }
-    ]
+    ],
+    "cleanUrls": true
 }

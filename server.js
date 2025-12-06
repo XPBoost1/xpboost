@@ -13,6 +13,30 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('.')); // Serve static files from current directory
 
+// Middleware to handle clean URLs (remove .html extension)
+app.use((req, res, next) => {
+    // Skip if it's an API route
+    if (req.path.startsWith('/api/')) {
+        return next();
+    }
+
+    // Skip if the path already has an extension
+    if (req.path.includes('.')) {
+        return next();
+    }
+
+    // Try to serve the .html file
+    const path = require('path');
+    const fs = require('fs');
+    const htmlPath = path.join(__dirname, req.path + '.html');
+
+    if (fs.existsSync(htmlPath)) {
+        return res.sendFile(htmlPath);
+    }
+
+    next();
+});
+
 // Nodemailer Transporter
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -232,32 +256,116 @@ app.post('/api/quote', async (req, res) => {
     const mailOptions = {
         from: `"${name}" <${email}>`,
         to: process.env.EMAIL_USER,
+        replyTo: email,
         subject: `New Quote Request from ${companyName}`,
         html: `
-            <h2>New Quote Request</h2>
-            <br>
-            <h3>Company Information</h3>
-            <p><strong>Company Name:</strong> ${companyName}</p>
-            <p><strong>Company Size:</strong> ${companySize || 'Not specified'}</p>
-            <p><strong>Industry:</strong> ${industry}</p>
-            <br>
-            <h3>Project Goals</h3>
-            <p><strong>Goals:</strong> ${goalsDisplay}</p>
-            <br>
-            <h3>Timeline</h3>
-            <p><strong>Project Timeline:</strong> ${timeline}</p>
-            <br>
-            <h3>Budget</h3>
-            <p><strong>Budget Range:</strong> ${budget}</p>
-            <br>
-            <h3>Services & Requirements</h3>
-            <p><strong>Services Needed:</strong> ${servicesDisplay}</p>
-            <p><strong>Additional Information:</strong></p>
-            <p>${additional_info || 'None provided'}</p>
-            <br>
-            <h3>Contact Details</h3>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+                    .container { max-width: 650px; margin: 0 auto; padding: 20px; }
+                    .header { background: linear-gradient(135deg, #22c55e, #16a34a); color: white; padding: 40px 30px; border-radius: 10px 10px 0 0; text-align: center; }
+                    .header h1 { margin: 0; font-size: 28px; font-weight: 700; }
+                    .header p { margin: 10px 0 0 0; font-size: 14px; opacity: 0.95; }
+                    .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
+                    .section { margin-bottom: 30px; }
+                    .section-title { font-size: 18px; font-weight: 700; color: #22c55e; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #22c55e; }
+                    .field { margin-bottom: 15px; }
+                    .label { font-weight: 600; color: #4b5563; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; display: block; }
+                    .value { background: white; padding: 12px 15px; border-radius: 6px; border-left: 3px solid #22c55e; font-size: 15px; color: #1f2937; }
+                    .info-box { background: #e0f2e9; padding: 15px; border-radius: 8px; border-left: 4px solid #22c55e; margin-top: 10px; }
+                    .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 13px; }
+                    .footer-time { font-weight: 600; color: #4b5563; }
+                    .badge { display: inline-block; background: #22c55e; color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; margin-left: 10px; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h1>💼 New Quote Request</h1>
+                        <p>A potential client has requested a custom quote</p>
+                    </div>
+                    <div class="content">
+                        
+                        <!-- Company Information -->
+                        <div class="section">
+                            <div class="section-title">📊 Company Information</div>
+                            <div class="field">
+                                <span class="label">Company Name</span>
+                                <div class="value">${companyName}</div>
+                            </div>
+                            <div class="field">
+                                <span class="label">Company Size</span>
+                                <div class="value">${companySize || 'Not specified'}</div>
+                            </div>
+                            <div class="field">
+                                <span class="label">Industry</span>
+                                <div class="value">${industry}</div>
+                            </div>
+                        </div>
+
+                        <!-- Project Goals -->
+                        <div class="section">
+                            <div class="section-title">🎯 Project Goals</div>
+                            <div class="field">
+                                <div class="value">${goalsDisplay}</div>
+                            </div>
+                        </div>
+
+                        <!-- Timeline & Budget -->
+                        <div class="section">
+                            <div class="section-title">⏱️ Timeline & Budget</div>
+                            <div class="field">
+                                <span class="label">Project Timeline</span>
+                                <div class="value">${timeline}</div>
+                            </div>
+                            <div class="field">
+                                <span class="label">Budget Range</span>
+                                <div class="value">${budget}</div>
+                            </div>
+                        </div>
+
+                        <!-- Services & Requirements -->
+                        <div class="section">
+                            <div class="section-title">🛠️ Services & Requirements</div>
+                            <div class="field">
+                                <span class="label">Services Needed</span>
+                                <div class="value">${servicesDisplay}</div>
+                            </div>
+                            ${additional_info ? `
+                            <div class="field">
+                                <span class="label">Additional Information</span>
+                                <div class="info-box">${additional_info}</div>
+                            </div>
+                            ` : ''}
+                        </div>
+
+                        <!-- Contact Details -->
+                        <div class="section">
+                            <div class="section-title">👤 Contact Details</div>
+                            <div class="field">
+                                <span class="label">Name</span>
+                                <div class="value">${name}</div>
+                            </div>
+                            <div class="field">
+                                <span class="label">Email Address</span>
+                                <div class="value">
+                                    <a href="mailto:${email}" style="color: #22c55e; text-decoration: none; font-weight: 600;">${email}</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="footer">
+                            <p class="footer-time">📅 Received: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'full', timeStyle: 'short' })}</p>
+                            <p style="margin-top: 10px;">This quote request was submitted via the NEAHXp quote form</p>
+                            <p style="margin-top: 5px; font-size: 12px;">⚡ Respond within 24 hours for best conversion rates</p>
+                        </div>
+                    </div>
+                </div>
+            </body>
+            </html>
         `
     };
 
