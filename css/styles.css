@@ -626,6 +626,10 @@ body.ai-agent-theme .text-gold {
     display: none;
   }
 
+  .nav-container .btn-primary {
+    display: none;
+  }
+
   .mobile-menu-btn {
     display: block;
   }
