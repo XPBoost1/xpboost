@@ -364,7 +364,7 @@
 }
 
 .modal-content {
-    grid-template-columns: 45% 55%;
+    grid-template-columns: 1fr;
 }
 
 .modal-details {

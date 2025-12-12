@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalClient = document.getElementById('modal-client');
     const modalDate = document.getElementById('modal-date');
     const modalRole = document.getElementById('modal-role');
-    const modalIcon = document.getElementById('modal-icon');
+    // modal-icon removed - no longer displaying project image in modal
     const modalTags = document.getElementById('modal-tags');
 
     // New Case Study Elements
@@ -85,14 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalClient.textContent = data.client;
             modalDate.textContent = data.date;
             modalRole.textContent = data.role;
-
-            // Update Icon or Image
-            if (data.icon.includes('/') || data.icon.startsWith('http')) {
-                modalIcon.innerHTML = `<img src="${data.icon}" alt="${data.title}" style="width: 100%; height: 100%; object-fit: cover;">`;
-            } else {
-                modalIcon.innerHTML = `<i data-lucide="${data.icon}" style="width: 80px; height: 80px; color: var(--primary);"></i>`;
-                lucide.createIcons();
-            }
+            // Modal image section removed - icon/image no longer displayed
 
             // Update Tags
             modalTags.innerHTML = data.tags.map(tag => `<span class="tag">${tag.trim()}</span>`).join('');
